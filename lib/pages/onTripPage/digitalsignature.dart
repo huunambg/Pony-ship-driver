@@ -219,7 +219,7 @@ class _DigitalSignatureState extends State<DigitalSignature> {
 
                                     signatureFile.writeAsBytesSync(uintImage);
 
-                                    var val = await uploadSignatureImage();
+                                    var val = await uploadSignatureImage(context);
                                     if (val == 'success') {
                                       if (driverReq['is_completed'] == 1) {
                                         navigate();

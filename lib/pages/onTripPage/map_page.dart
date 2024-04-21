@@ -2713,7 +2713,7 @@ class _MapsState extends State<Maps>
                                                                                                     setState(() {
                                                                                                       _isLoading = true;
                                                                                                     });
-                                                                                                    await requestAccept();
+                                                                                                    await requestAccept(context);
                                                                                                     setState(() {
                                                                                                       _isLoading = false;
                                                                                                     });
@@ -3274,7 +3274,7 @@ class _MapsState extends State<Maps>
                                                                                     }
                                                                                   } else {
                                                                                     driverOtp = '';
-                                                                                    var val = await endTrip();
+                                                                                    var val = await endTrip(context);
                                                                                     if (val == 'logout') {
                                                                                       navigateLogout();
                                                                                     }
@@ -4112,7 +4112,7 @@ class _MapsState extends State<Maps>
                                                                                     } else if (driverReq['enable_shipment_unload_feature'].toString() == '0' && driverReq['enable_digital_signature'].toString() == '1') {
                                                                                       Navigator.push(context, MaterialPageRoute(builder: (context) => const DigitalSignature()));
                                                                                     } else {
-                                                                                      var val = await endTrip();
+                                                                                      var val = await endTrip(context);
                                                                                       if (val == 'logout') {
                                                                                         navigateLogout();
                                                                                       }
@@ -5487,7 +5487,7 @@ class _MapsState extends State<Maps>
                                                         navigate();
                                                       } else {
                                                         var val =
-                                                            await endTrip();
+                                                            await endTrip(context);
                                                         if (val == 'logout') {
                                                           navigateLogout();
                                                         }

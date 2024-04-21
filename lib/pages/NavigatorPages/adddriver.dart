@@ -40,7 +40,7 @@ class _AddDriverState extends State<AddDriver> {
   }
 
   countryCode() async {
-    var result = await getCountryCode();
+    var result = await getCountryCode(context);
     if (result == 'success') {
       setState(() {
         _loading = false;
@@ -345,7 +345,7 @@ class _AddDriverState extends State<AddDriver> {
                                                 );
                                               });
                                         } else {
-                                          getCountryCode();
+                                          getCountryCode(context);
                                         }
                                         setState(() {});
                                       },

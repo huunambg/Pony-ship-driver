@@ -5,6 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_driver/widgets/widgets.dart';
 import 'package:geolocator/geolocator.dart' as geolocs;
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
@@ -32,6 +33,7 @@ import '../pages/onTripPage/map_page.dart';
 import '../pages/onTripPage/review_page.dart';
 import '../styles/styles.dart';
 import 'geohash.dart';
+
 //languages code
 dynamic phcode;
 dynamic platform;
@@ -48,7 +50,8 @@ String ischeckownerordriver = '';
 String transportType = '';
 
 //base url
-String url = 'https://taxi.myb.vn/'; //add '/' at the end of the url as 'https://url.com/'
+String url =
+    'https://pony.myb.vn/'; //add '/' at the end of the url as 'https://url.com/'
 String mapkey = 'AIzaSyABvBTKZlE8A-6TIK6ZK9SCm2dzPhu2x0c';
 String mapStyle = '';
 
@@ -262,7 +265,7 @@ uploadDocs() async {
   return result;
 }
 
-uploadFleetDocs(fleetid) async {
+uploadFleetDocs(fleetid, BuildContext context) async {
   dynamic result;
   try {
     var response = http.MultipartRequest(
@@ -291,6 +294,7 @@ uploadFleetDocs(fleetid) async {
     if (request.statusCode == 200) {
       result = val['message'];
     } else if (request.statusCode == 422) {
+      Customdialog().show(context, jsonDecode(respon.body));git 
       debugPrint(respon.body);
       var error = jsonDecode(respon.body)['errors'];
       result = error[error.keys.toList()[0]]
@@ -303,6 +307,7 @@ uploadFleetDocs(fleetid) async {
     } else {
       debugPrint(respon.body);
       result = val['message'];
+       Customdialog().show(context, jsonDecode(respon.body));
     }
   } catch (e) {
     if (e is SocketException) {
@@ -316,7 +321,7 @@ uploadFleetDocs(fleetid) async {
 //getting country code
 
 List countries = [];
-getCountryCode() async {
+getCountryCode(BuildContext context) async {
   dynamic result;
   try {
     final response = await http.get(Uri.parse('${url}api/v1/countries'));
@@ -329,6 +334,7 @@ getCountryCode() async {
               : 0;
       result = 'success';
     } else {
+       Customdialog().show(context, jsonDecode(response.body));
       debugPrint(response.body);
       result = 'error';
     }
@@ -336,6 +342,7 @@ getCountryCode() async {
     if (e is SocketException) {
       internet = false;
       result = 'no internet';
+      
     }
   }
   return result;
@@ -653,8 +660,7 @@ registerDriver() async {
           .replaceAll(']', '')
           .toString();
 
-print("data : ${jsonDecode(respon.body)}");
-          
+      print("data : ${jsonDecode(respon.body)}");
     } else {
       debugPrint(respon.body);
       result = jsonDecode(respon.body)['message'];
@@ -713,14 +719,14 @@ addDriver() async {
     }
   }
 
-print("data : ${result}");
+  print("data : ${result}");
 
   return result;
 }
 
 //register owner
 
-registerOwner() async {
+registerOwner(BuildContext context) async {
   bearerToken.clear();
   dynamic result;
   try {
@@ -771,6 +777,7 @@ registerOwner() async {
       }
       result = 'true';
     } else if (respon.statusCode == 422) {
+       Customdialog().show(context, jsonDecode(respon.body));
       debugPrint(respon.body);
       var error = jsonDecode(respon.body)['errors'];
       result = error[error.keys.toList()[0]]
@@ -1086,6 +1093,7 @@ getDocumentsNeeded() async {
       'Authorization': 'Bearer ${bearerToken[0].token}',
       'Content-Type': 'application/json'
     });
+    print("getDocumentsNeeded ${jsonDecode(response.body)}");
     if (response.statusCode == 200) {
       documentsNeeded = jsonDecode(response.body)['data'];
       enableDocumentSubmit = jsonDecode(response.body)['enable_submit_button'];
@@ -1203,6 +1211,8 @@ verifyUser(String number) async {
       internet = false;
     }
   }
+
+  print("verifyUser :$val");
   return val;
 }
 
@@ -1253,6 +1263,7 @@ driverLogin() async {
       result = 'no internet';
     }
   }
+  print("driverLogin :$result");
   return result;
 }
 
@@ -1364,6 +1375,7 @@ getUserDetails() async {
       result = 'no internet';
     }
   }
+  print("getUserDetails $result");
   return result;
 }
 
@@ -1764,7 +1776,7 @@ calculateIdleDistance(lat1, lon1, lat2, lon2) {
 
 //driver request accept
 
-requestAccept() async {
+requestAccept(BuildContext context) async {
   dynamic result;
   try {
     var response = await http.post(Uri.parse('${url}api/v1/request/respond'),
@@ -1815,6 +1827,8 @@ requestAccept() async {
       result = 'logout';
     } else {
       result = 'failed';
+      print("Status ${response.statusCode}");
+      Customdialog().show(context,response.body);
       debugPrint(response.body);
     }
     return result;
@@ -2263,7 +2277,7 @@ geoCoding(double lat, double lng) async {
 
 //ending trip
 
-endTrip() async {
+endTrip(BuildContext context) async {
   dynamic result;
   try {
     await requestDetailsUpdate(
@@ -2290,6 +2304,28 @@ endTrip() async {
       'trip_start': "1",
     });
 
+
+      var data = {
+          'request_id': driverReq['id'],
+          'distance': dist,
+          'before_arrival_waiting_time': 0,
+          'after_arrival_waiting_time': 0,
+          'drop_lat': center.latitude,
+          'drop_lng': center.longitude,
+          'drop_address': dropAddress,
+          'before_trip_start_waiting_time': (waitingBeforeTime != null &&
+                  waitingBeforeTime > 60 &&
+                  driverReq['is_rental'] != true)
+              ? (waitingBeforeTime / 60).toInt()
+              : 0,
+          'after_trip_start_waiting_time': (waitingAfterTime != null &&
+                  waitingAfterTime > 60 &&
+                  driverReq['is_rental'] != true)
+              ? (waitingAfterTime / 60).toInt()
+              : 0
+        };
+        print("data ${data}");
+  
     var response = await http.post(Uri.parse('${url}api/v1/request/end'),
         headers: {
           'Authorization': 'Bearer ${bearerToken[0].token}',
@@ -2314,6 +2350,7 @@ endTrip() async {
               ? (waitingAfterTime / 60).toInt()
               : 0
         }));
+        //  debugPrint(response.body);
     if (response.statusCode == 200) {
       await getUserDetails();
       FirebaseDatabase.instance
@@ -2339,6 +2376,8 @@ endTrip() async {
       result = 'logout';
     } else {
       result = 'failed';
+      print("Status ${response.statusCode}");
+      Customdialog().show(context,response.body);
       debugPrint(response.body);
     }
     return result;
@@ -2351,7 +2390,7 @@ endTrip() async {
 
 // upload drop goods image
 
-uploadSignatureImage() async {
+uploadSignatureImage(BuildContext context) async {
   dynamic result;
 
   try {
@@ -2367,7 +2406,7 @@ uploadSignatureImage() async {
     var respon = await http.Response.fromStream(request);
     final val = jsonDecode(respon.body);
     if (request.statusCode == 200) {
-      await endTrip();
+      await endTrip(context);
       result = 'success';
     } else if (request.statusCode == 401) {
       result = 'logout';
@@ -2607,7 +2646,7 @@ cancelRequestDriver(reason) async {
     } else if (response.statusCode == 401) {
       result = 'logout';
     } else {
-      debugPrint(response.body);
+      debugPrint("cancelRequestDriver ${response.body}");
       result = false;
     }
   } catch (e) {
@@ -2852,7 +2891,7 @@ updateVehicle() async {
     } else if (response.statusCode == 401) {
       result = 'logout';
     } else {
-      debugPrint(response.body);
+      print("updateVehicle ${response.body}");
       result = 'failure';
     }
   } catch (e) {
@@ -3580,6 +3619,7 @@ driverTodayEarning() async {
     );
     if (response.statusCode == 200) {
       result = 'success';
+      print("driverTodayEarnings : ${jsonDecode(response.body)}");
       driverTodayEarnings = jsonDecode(response.body)['data'];
     } else if (response.statusCode == 401) {
       result = 'logout';
@@ -3609,6 +3649,7 @@ driverWeeklyEarning() async {
     if (response.statusCode == 200) {
       result = 'success';
       driverWeeklyEarnings = jsonDecode(response.body)['data'];
+      print("driverWeeklyEarnings ${driverWeeklyEarnings}");
       weekDays = jsonDecode(response.body)['data']['week_days'];
     } else if (response.statusCode == 401) {
       result = 'logout';
@@ -3636,6 +3677,7 @@ driverEarningReport(fromdate, todate) async {
       },
     );
     if (response.statusCode == 200) {
+      print("driverReportEarnings : ${jsonDecode(response.body)}");
       driverReportEarnings = jsonDecode(response.body)['data'];
       result = 'success';
     } else if (response.statusCode == 401) {

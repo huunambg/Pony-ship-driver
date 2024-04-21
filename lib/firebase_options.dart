@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,43 +49,22 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBCUjIFaQbji5HtyTf6cqmQzRS9j-Zxqx4',
-    appId: '1:1082906545283:web:b4d0668ff1de740a659fb6',
-    messagingSenderId: '1082906545283',
-    projectId: 'taxi-a30eb',
-    authDomain: 'taxi-a30eb.firebaseapp.com',
-    databaseURL: 'https://taxi-a30eb-default-rtdb.firebaseio.com',
-    storageBucket: 'taxi-a30eb.appspot.com',
-    measurementId: 'G-T08TL50ZTY',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCkqXkRO9gM0BqaRFo3u1_j5u70jIWqIPM',
-    appId: '1:1082906545283:android:b00e12302fad8c3b659fb6',
-    messagingSenderId: '1082906545283',
-    projectId: 'taxi-a30eb',
-    databaseURL: 'https://taxi-a30eb-default-rtdb.firebaseio.com',
-    storageBucket: 'taxi-a30eb.appspot.com',
+    apiKey: 'AIzaSyBproo3KGKdaUSrjsarU_OfDe73mSfaBNw',
+    appId: '1:957033296631:android:75ede09af17bba3e26d9f2',
+    messagingSenderId: '957033296631',
+    projectId: 'pony-a861f',
+    databaseURL: 'https://pony-a861f-default-rtdb.firebaseio.com',
+    storageBucket: 'pony-a861f.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA37HlfhheAH31CBCQGJ159UWisEsWRp1c',
-    appId: '1:1082906545283:ios:7745ac8679371c69659fb6',
-    messagingSenderId: '1082906545283',
-    projectId: 'taxi-a30eb',
-    databaseURL: 'https://taxi-a30eb-default-rtdb.firebaseio.com',
-    storageBucket: 'taxi-a30eb.appspot.com',
+    apiKey: 'AIzaSyAwkX8QBzpbomfJvpCecyCK_ue-iBwxWiw',
+    appId: '1:957033296631:ios:ed5f125daedeaad826d9f2',
+    messagingSenderId: '957033296631',
+    projectId: 'pony-a861f',
+    databaseURL: 'https://pony-a861f-default-rtdb.firebaseio.com',
+    storageBucket: 'pony-a861f.appspot.com',
     iosBundleId: 'bundle.id',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyA37HlfhheAH31CBCQGJ159UWisEsWRp1c',
-    appId: '1:1082906545283:ios:a53a0412ac51107b659fb6',
-    messagingSenderId: '1082906545283',
-    projectId: 'taxi-a30eb',
-    databaseURL: 'https://taxi-a30eb-default-rtdb.firebaseio.com',
-    storageBucket: 'taxi-a30eb.appspot.com',
-    iosBundleId: 'com.example.flutterDriver.RunnerTests',
   );
 }

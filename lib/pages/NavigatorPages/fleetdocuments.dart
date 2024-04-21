@@ -713,7 +713,7 @@ class _UploadDocsState extends State<UploadDocs> {
                                       _loading = true;
                                     });
                                     var result =
-                                        await uploadFleetDocs(widget.fleetid);
+                                        await uploadFleetDocs(widget.fleetid,context);
                                     if (result == 'success') {
                                       var val = await getFleetDocumentsNeeded(
                                           widget.fleetid);

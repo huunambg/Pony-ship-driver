@@ -687,7 +687,7 @@ class _OwnersRegisterState extends State<OwnersRegister> {
                                     _loading = true;
                                   });
 
-                                  var val = await registerOwner();
+                                  var val = await registerOwner(context);
                                   if (val == 'true') {
                                     carInformationCompleted = true;
                                     // ignore: use_build_context_synchronously

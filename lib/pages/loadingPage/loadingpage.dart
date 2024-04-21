@@ -160,6 +160,9 @@ class _LoadingPageState extends State<LoadingPage> {
       } else {
         setState(() {});
       }
+
+
+      print("error : $e");
     }
   }
 
@@ -193,7 +196,6 @@ class _LoadingPageState extends State<LoadingPage> {
               ),
             ),
 
-            //update available
 
             (updateAvailable == true)
                 ? Positioned(

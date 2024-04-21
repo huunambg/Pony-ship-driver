@@ -508,3 +508,18 @@ class _MyTextFieldState extends State<MyTextField> {
         onChanged: widget.onTap);
   }
 }
+
+
+class Customdialog {
+void show(BuildContext context,var data){
+        showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Gặp lỗi"),
+            content:Text(data),
+          );
+        },
+      );
+}
+}
