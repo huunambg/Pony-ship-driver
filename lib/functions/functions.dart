@@ -294,7 +294,7 @@ uploadFleetDocs(fleetid, BuildContext context) async {
     if (request.statusCode == 200) {
       result = val['message'];
     } else if (request.statusCode == 422) {
-      Customdialog().show(context, jsonDecode(respon.body));git 
+      Customdialog().show(context, jsonDecode(respon.body));
       debugPrint(respon.body);
       var error = jsonDecode(respon.body)['errors'];
       result = error[error.keys.toList()[0]]
